@@ -67,7 +67,7 @@
                                 <option value="Doctor">Doctor</option>
                                 <option value="Disease">Disease</option>
                             </select>
-                            <button class="btn btn-primary btn-lg ml-2 btn-search" type="submit">Search</button>
+                            <button class="btn btn-primary btn-lg ml-2 btn-search">Search</button>
                         </div>
                     </div>
                 </form>
@@ -101,20 +101,6 @@
         </div>
     </section>
 </div>
-
-    <!-- <section id="list">
-        <div class="container">
-            <h2>List</h2>
-            <p>This is the list section.</p>
-            {{-- @if (isset($data))
-                <ul>
-                    @foreach ($data as $item)
-                        <li>{{ $item }}</li>
-                    @endforeach
-                </ul>
-            @endif --}}
-        </div>
-    </section> -->
 
     <section id="contact">
         <div class="container">

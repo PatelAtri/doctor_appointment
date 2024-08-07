@@ -1,17 +1,19 @@
 $(document).ready(function() {
-    $(document).on('click', '.btn-search', function() {
+    $(document).on('click', '.btn-search', function(event) {
+        event.preventDefault();
         var form = $('#search-form');
-        console.log(form);
-        var url = location.href + 'search';
-        console.log(url);
         $.ajax({
             method: 'GET',
             url: location.href + 'search',
             data: form.serialize(),
             success: function(res) {
-                console.log(res);
                 $('#list').show();
+
                 if(res.status) {
+                    if ($.fn.DataTable.isDataTable('#hospital-datatable')) {
+                        $('#hospital-datatable').DataTable().clear().destroy();
+                    }
+
                     var hospitalDatatable = $('#hospital-datatable').DataTable({
                         processing: true,
                         stateSave: true,
