@@ -13,6 +13,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <style>
         body {
             position: relative;
@@ -20,6 +22,16 @@
 
         #contact {
             margin-top: 100px;
+        }
+
+        #list {
+            display: none;
+        }
+
+        .card {
+            background-color: white;
+            margin: 10px;
+            padding: 2px;
         }
     </style>
 </head>
@@ -63,7 +75,34 @@
         </div>
     </section>
 
+<div class="card">
     <section id="list">
+        <div class="container">
+            <h2>Data that you have searched for</h2>
+            <div id="datatable-container">
+                <table id="hospital-datatable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Doctor Name</th>
+                            <th>Hospital Name</th>
+                            <th>Disease Name</th>
+                            <th>Address</th>
+                            <th>Status</th>
+                            <th>Doctor contact no</th>
+                            <th>Hospital contact no</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hospital-datatable-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+    <!-- <section id="list">
         <div class="container">
             <h2>List</h2>
             <p>This is the list section.</p>
@@ -75,7 +114,7 @@
                 </ul>
             @endif --}}
         </div>
-    </section>
+    </section> -->
 
     <section id="contact">
         <div class="container">
@@ -98,6 +137,7 @@
         </div>
     </section>
 
+
     <script>
         document.body.setAttribute('data-bs-spy', 'scroll');
         document.body.setAttribute('data-bs-target', '.navbar');
@@ -106,3 +146,5 @@
 </body>
 
 </html>
+
+<script src="{{ asset('admin/home.js') }}" type="text/javascript"></script>
