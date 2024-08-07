@@ -78,7 +78,7 @@
 <div class="card">
     <section id="list">
         <div class="container">
-            <h2>Data that you have searched for</h2>
+            <h2>Data that you have searched</h2>
             <div id="datatable-container">
                 <table id="hospital-datatable" class="table table-striped">
                     <thead>
