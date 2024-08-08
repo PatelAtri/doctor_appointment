@@ -49,7 +49,7 @@
         }
 
         .nav-link:hover {
-            color: #fff;
+            color: #fff !important;
             background-color: #3F7496;
             border-radius: 5px;
         }
@@ -58,6 +58,15 @@
             color: #3F7496;
             color: white;
             font-weight: bold;
+        }
+
+        .error-message {
+            color:red
+        }
+
+        label.field-required::after {
+            content: ' *';
+            color: red;
         }
     </style>
 </head>
@@ -96,7 +105,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
-                                    <select class="form-select form-select-sm" id="categorySelect" name="category">
+                                    <select class="form-select" id="categorySelect" name="category">
                                         <option value="Hospital">Hospital</option>
                                         <option value="Doctor">Doctor</option>
                                         <option value="Disease">Disease</option>
@@ -106,7 +115,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <button class="btn btn-sm btn-search" style="background-color: #FEAF3A">Search</button>
+                                <button class="btn btn-sm btn-primary btn-search">Search</button>
                             </div>
                         </div>
                     </div>
@@ -115,7 +124,7 @@
         </div>
     </section>
 
-    <div class="card">
+    <!-- <div class="card"> -->
         <section id="list">
             <div class="container">
                 <h2>Data that you have searched</h2>
@@ -140,7 +149,7 @@
                 </div>
             </div>
         </section>
-    </div>
+    <!-- </div> -->
 
     <div style="margin-top: 15px">
         <div style="margin-left: 37%">ONLINE APPOINTMENT SCHEDULING PLATFORM</div>
@@ -177,6 +186,72 @@
             <div style="margin:40px 0 0 35%">Copyright © 2024 All Rights Reserved</div>
         </div>
     </section>
+
+<div class="modal fade" id="loginModal">
+   <div class="modal-dialog">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h5 class="modal-title">Login</h5>
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+           </div>
+           <div class="modal-body">
+               <form method="post" id="login-form">
+                   <!-- <input type="hidden" name="id" class="form-control"> -->
+                   <!-- <br> -->
+                   <label class="field-required">Email</label>
+                   <input type="text" name="email" class="form-control required" placeholder="Enter email id">
+                   <span id="error-email" class="error-message"></span><br>
+
+                   <label class="field-required">Password</label>
+                   <input type="password" name="password" class="form-control required" placeholder="Enter password">
+                   <span id="error-password" class="error-message"></span><br>
+
+                   <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+                   <!-- <br> -->
+               </form>
+           </div>
+           <div class="modal-footer">
+                <p id="signup-first"></p>
+                <button type="button" class="btn btn-md btn-primary signup-btn">Sign up</button>
+                <button type="button" class="btn btn-md btn-primary login-btn">Login</button>
+                <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Cancel</button>
+           </div>
+       </div>
+   </div>
+</div>
+
+<div class="modal fade" id="appointmentModal">
+   <div class="modal-dialog">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h5 class="modal-title">Appointment</h5>
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+           </div>
+           <div class="modal-body">
+               <form id="appointment-form">
+                   <!-- <input type="hidden" name="id" class="form-control"> -->
+                   <!-- <br> -->
+                   <label class="field-required">Email</label>
+                   <input type="text" name="email" class="form-control required" placeholder="Enter email id">
+                   <span id="error-email" class="error-message"></span><br>
+
+                   <label class="field-required">Password</label>
+                   <input type="password" name="password" class="form-control required" placeholder="Enter password">
+                   <span id="error-password" class="error-message"></span><br>
+
+                   <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+                   <!-- <br> -->
+               </form>
+           </div>
+           <div class="modal-footer">
+                <p id="signup-first"></p>
+                <!-- <button type="button" class="btn btn-md btn-primary signup-btn">Sign up</button> -->
+                <button type="button" class="btn btn-md btn-primary book-btn">Save</button>
+                <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Cancel</button>
+           </div>
+       </div>
+   </div>
+</div>
 
 
     <script>

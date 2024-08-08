@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\healthcare_details;
+use App\Models\loginUser;
 
 class HomeController extends Controller
 {
@@ -45,6 +46,32 @@ class HomeController extends Controller
             return [
                 "status" => false,
                 "message" => $e->getMessage()
+            ];
+        }
+    }
+
+    public function login(Request $request) {
+    // \Log::info('login request',[$request->all()]);
+        $email = $request->input('email');
+        $password = $request->input('password');
+        \Log::info('email',[$email]);
+        \Log::info('password',[$password]);
+        $user = new \App\Models\loginUser();
+        $user->name = "John";
+        $user->email = $email;
+        $user->password = bcrypt($request->input('password')); // Hash the password
+        $user->address = "abc street, africa";
+        $user->user_contact_no = "1234567890";
+        $user->save();
+        $user = loginUser::where('email',$email)->first();
+        \Log::info('user',[$user]);
+        if ($user && \Hash::check($password, $user->password)) {
+            return [
+                "status" => true
+            ];
+        } else {
+            return 
+                ["status" => false
             ];
         }
     }

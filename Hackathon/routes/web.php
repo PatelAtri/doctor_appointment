@@ -19,3 +19,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'App\Http\Controllers\HomeController@index')->name('home');
 
 Route::get('/search', 'App\Http\Controllers\HomeController@search')->name('search');
+
+Route::post('/login', 'App\Http\Controllers\HomeController@login')->name('login');
+
