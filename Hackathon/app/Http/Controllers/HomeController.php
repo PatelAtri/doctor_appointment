@@ -94,4 +94,9 @@ class HomeController extends Controller
             ];
         }
     }
+
+    public function doctorData (Request $request) {
+        \Log::info('hospital Id',[$request->hospitalId]);
+        //healthcare_details table mathi search krje and response get krje ajax ma
+    }
 }

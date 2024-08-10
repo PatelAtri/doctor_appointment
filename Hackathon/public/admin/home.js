@@ -86,7 +86,7 @@ function addClickEvents() {
                             },
                             {
                                 data: null,
-                                orderable: true,
+                                orderable: false,
                                 searchable: true,
                                 render: function(data, type, row) {
                                     var bookAppointment = '<button class="btn btn-md btn-primary appointment" title="Delete" data-hospital-id="' + row.id + '">Appointment</button>';
@@ -102,12 +102,19 @@ function addClickEvents() {
     });
 
     $(document).on('click', '.appointment', function() {
+        var hospitalId = $(this).data('hospital-id');
+        console.log(hospitalId);
         $('#loginModal').modal('show');
+        $('#loginModal').find('.login-btn').data('hospital-id', hospitalId);
+        $('#loginModal').find('.signup-appear').data('hospital-id', hospitalId);    
     });
 
     $(document).on('click', '.signup-appear', function() {
+        var hospitalId = $(this).data('hospital-id');
+        console.log(hospitalId);
         $('#loginModal').modal('hide');
         $('#signUpModal').modal('show');
+        $('#signUpModal').find('.signup-btn').data('hospital-id', hospitalId);
     });
 
     $(document).on('click', '.login-btn', function (event) {
@@ -151,7 +158,8 @@ function addClickEvents() {
             $('#error-password').text('Enter password of length min 8');
             return false;
         }
- 
+
+         var hospitalId = $('#loginModal').find('.login-btn').data('hospital-id');
         $.ajax({
             method: form.attr('method'),
             url: window.location.origin + '/login',
@@ -160,6 +168,7 @@ function addClickEvents() {
                 $('.error-message').text('');
                 if(res.status) {
                     $('#loginModal').modal('hide');
+                    bookAppointmentModalFunction(hospitalId);
                     $('#appointmentModal').modal('show');
                 } else {
                     $('#signup-first').text("Welcome! It looks like you're visiting us for the first time. Please sign up to create an account before logging in.");
@@ -182,7 +191,8 @@ function addClickEvents() {
             $('#error-password').text('Enter password of length min 8');
             return false;
         }
- 
+
+        var hospitalId = $('#signUpModal').find('.signup-btn').data('hospital-id');
         $.ajax({
             method: 'POST',
             url: window.location.origin + '/signup',
@@ -191,6 +201,7 @@ function addClickEvents() {
                 $('.error-message').text('');
                 if(res.status) {
                     $('#signUpModal').modal('hide');
+                    bookAppointmentModalFunction(hospitalId);
                     $('#appointmentModal').modal('show');
                 } else {
                 }
@@ -221,4 +232,24 @@ function validateSignUpForm() {
         }
     });
     return isValid;
+}
+
+function bookAppointmentModalFunction (hospitalId) {
+    console.log(hospitalId);
+    var data = {};
+    data.hospitalId = hospitalId;
+    $.ajax({
+        method: 'GET',
+        url: window.location.origin + '/doctor-data',
+        data: data,
+        success: function (res) {
+            console.log(res);
+            if(res.status) {
+            } else {
+            }
+        },
+        error: function () {
+            // swal('', 'Discount not saved.', 'error');
+        }
+    });
 }
