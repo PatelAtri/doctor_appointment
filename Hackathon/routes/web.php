@@ -22,3 +22,4 @@ Route::get('/search', 'App\Http\Controllers\HomeController@search')->name('searc
 
 Route::post('/login', 'App\Http\Controllers\HomeController@login')->name('login');
 
+Route::post('/signup', 'App\Http\Controllers\HomeController@signup')->name('signup');

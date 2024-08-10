@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\healthcare_details;
 use App\Models\loginUser;
+use Illuminate\Support\Facades\Hash;
+
 
 class HomeController extends Controller
 {
@@ -51,27 +53,44 @@ class HomeController extends Controller
     }
 
     public function login(Request $request) {
-    // \Log::info('login request',[$request->all()]);
         $email = $request->input('email');
         $password = $request->input('password');
-        \Log::info('email',[$email]);
-        \Log::info('password',[$password]);
-        $user = new \App\Models\loginUser();
-        $user->name = "John";
-        $user->email = $email;
-        $user->password = bcrypt($request->input('password')); // Hash the password
-        $user->address = "abc street, africa";
-        $user->user_contact_no = "1234567890";
-        $user->save();
         $user = loginUser::where('email',$email)->first();
-        \Log::info('user',[$user]);
-        if ($user && \Hash::check($password, $user->password)) {
-            return [
-                "status" => true
-            ];
+        if ($user) {
+            if(Hash::check($password, $user->password)) {
+                return [
+                    "status" => true,
+                ];
+            } else {
+                return [
+                    "status" => false
+                ];
+            }
         } else {
-            return 
-                ["status" => false
+            return [
+                "status" => false
+            ];
+        }
+    }
+
+    public function signup (Request $request) {
+        try {
+            $user = new loginUser();
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->password = bcrypt($request->input('password')); // Hash the password
+            $user->address = $request->input('address');
+            $user->user_contact_no = $request->input('user_contact_no');
+            $user->save();
+            return [
+                "status" => true,
+                "message" => "Signup successfully done."
+            ];
+        } catch (\Exception $e) {
+            \Log::info('signup error',[$e->getMessage()]);
+            return [
+                "status" => false,
+                "message" => $e->getMessage()
             ];
         }
     }

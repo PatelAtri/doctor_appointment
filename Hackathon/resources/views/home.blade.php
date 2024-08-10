@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         body {
             position: relative;
@@ -67,6 +69,16 @@
         label.field-required::after {
             content: ' *';
             color: red;
+        }
+
+        .signup-appear {
+            display: none;
+        }
+
+        #spinner {
+            display: none;
+            text-align: center;
+            margin: 20px;
         }
     </style>
 </head>
@@ -124,6 +136,10 @@
         </div>
     </section>
 
+    <div id="spinner">
+        <p>Data searched by you will be displayed here</p>
+        <i class="fas fa-refresh fa-spin fa-2x"></i>
+    </div>
     <!-- <div class="card"> -->
         <section id="list">
             <div class="container">
@@ -187,71 +203,118 @@
         </div>
     </section>
 
-<div class="modal fade" id="loginModal">
-   <div class="modal-dialog">
-       <div class="modal-content">
-           <div class="modal-header">
-               <h5 class="modal-title">Login</h5>
-               <button type="button" class="close" data-dismiss="modal">&times;</button>
-           </div>
-           <div class="modal-body">
-               <form method="post" id="login-form">
-                   <!-- <input type="hidden" name="id" class="form-control"> -->
-                   <!-- <br> -->
-                   <label class="field-required">Email</label>
-                   <input type="text" name="email" class="form-control required" placeholder="Enter email id">
-                   <span id="error-email" class="error-message"></span><br>
+<!-- Login Modal -->
+    <div class="modal fade" id="loginModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="login-form">
+                        <!-- <input type="hidden" name="id" class="form-control"> -->
+                        <!-- <br> -->
+                        <label class="field-required">Email</label>
+                        <input type="email" name="email" class="form-control required" placeholder="Enter email id">
+                        <span id="error-email" class="error-message"></span><br>
 
-                   <label class="field-required">Password</label>
-                   <input type="password" name="password" class="form-control required" placeholder="Enter password">
-                   <span id="error-password" class="error-message"></span><br>
+                        <label class="field-required">Password</label>
+                        <input type="password" name="password" class="form-control required" placeholder="Enter password">
+                        <span id="error-password" class="error-message"></span><br>
 
-                   <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-                   <!-- <br> -->
-               </form>
-           </div>
-           <div class="modal-footer">
-                <p id="signup-first"></p>
-                <button type="button" class="btn btn-md btn-primary signup-btn">Sign up</button>
-                <button type="button" class="btn btn-md btn-primary login-btn">Login</button>
-                <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Cancel</button>
-           </div>
-       </div>
-   </div>
-</div>
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <!-- <br> -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                        <p id="signup-first"></p>
+                        <button type="button" class="btn btn-md btn-primary signup-appear">Sign up</button>
+                        <button type="button" class="btn btn-md btn-primary login-btn">Login</button>
+                        <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div class="modal fade" id="appointmentModal">
-   <div class="modal-dialog">
-       <div class="modal-content">
-           <div class="modal-header">
-               <h5 class="modal-title">Appointment</h5>
-               <button type="button" class="close" data-dismiss="modal">&times;</button>
-           </div>
-           <div class="modal-body">
-               <form id="appointment-form">
-                   <!-- <input type="hidden" name="id" class="form-control"> -->
-                   <!-- <br> -->
-                   <label class="field-required">Email</label>
-                   <input type="text" name="email" class="form-control required" placeholder="Enter email id">
-                   <span id="error-email" class="error-message"></span><br>
+<!-- Sign Up Modal -->
+    <div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="signUpModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signUpModalLabel">Sign Up</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="signup-form">
+                        <div class="mb-3">
+                            <label for="name" class="form-label field-required">Name</label>
+                            <input type="text" class="form-control required" id="name" name="name" placeholder="Enter your name">
+                            <span class="error-message" id="error-name"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label field-required">Email</label>
+                            <input type="email" class="form-control required" id="email" name="email" placeholder="Enter your email">
+                            <span class="error-message" id="error-email"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label field-required">Password</label>
+                            <input type="password" class="form-control required" id="password" name="password" placeholder="Enter your password">
+                            <span class="error-message" id="error-password"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label field-required">Address</label>
+                            <input type="text" class="form-control required" id="address" name="address" placeholder="Enter your address">
+                            <span class="error-message" id="error-address"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="user_contact_no" class="form-label field-required">Contact Number</label>
+                            <input type="text" class="form-control required" id="user_contact_no" name="user_contact_no" placeholder="Enter your contact number" required>
+                            <span class="error-message" id="error-user_contact_no"></span>
+                        </div>
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-md btn-primary signup-btn">Sign Up</button>
+                    <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                   <label class="field-required">Password</label>
-                   <input type="password" name="password" class="form-control required" placeholder="Enter password">
-                   <span id="error-password" class="error-message"></span><br>
+<!-- Book Appointment Modal -->
+    <div class="modal fade" id="appointmentModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Appointment</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="appointment-form">
+                        <!-- <input type="hidden" name="id" class="form-control"> -->
+                        <!-- <br> -->
+                        <label class="field-required">Email</label>
+                        <input type="text" name="email" class="form-control required" placeholder="Enter email id">
+                        <span id="error-email" class="error-message"></span><br>
 
-                   <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
-                   <!-- <br> -->
-               </form>
-           </div>
-           <div class="modal-footer">
-                <p id="signup-first"></p>
-                <!-- <button type="button" class="btn btn-md btn-primary signup-btn">Sign up</button> -->
-                <button type="button" class="btn btn-md btn-primary book-btn">Save</button>
-                <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Cancel</button>
-           </div>
-       </div>
-   </div>
-</div>
+                        <label class="field-required">Password</label>
+                        <input type="password" name="password" class="form-control required" placeholder="Enter password">
+                        <span id="error-password" class="error-message"></span><br>
+
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <!-- <br> -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                        <p id="signup-first"></p>
+                        <button type="button" class="btn btn-md btn-primary book-btn">Save Appointment</button>
+                        <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <script>

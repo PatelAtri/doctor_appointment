@@ -1,5 +1,24 @@
 $(document).ready(function() {
     addClickEvents();
+
+    $('#spinner').show();
+    $('#loginModal').on('hidden.bs.modal', function () {
+        $(this).find('input[type="email"], input[type="password"]').val('');
+        $('.error-message').text('');
+        $('#signup-first').text('');
+        $('.signup-appear').hide();
+    });
+
+    $('#signUpModal').on('hidden.bs.modal', function () {
+        $(this).find('input[type="email"], input[type="password"], input[type="text"]').val('');
+        $('.error-message').text('');
+    });
+
+    $('#appointmentModal').on('hidden.bs.modal', function () {
+        $(this).find('input[type="text"], input[type="password"]').val('');
+        $('.error-message').text('');
+    });
+ 
 });
 
 function addClickEvents() {
@@ -75,8 +94,9 @@ function addClickEvents() {
                                 }
                             },
                         ]
-                    })
+                    });
                 }
+                $('#spinner').hide();
             }
         });
     });
@@ -85,7 +105,8 @@ function addClickEvents() {
         $('#loginModal').modal('show');
     });
 
-    $(document).on('click', '.signup-btn', function() {
+    $(document).on('click', '.signup-appear', function() {
+        $('#loginModal').modal('hide');
         $('#signUpModal').modal('show');
     });
 
@@ -93,6 +114,22 @@ function addClickEvents() {
         event.preventDefault();
         if (validateForm()) {
             $('#login-form').submit();
+        } else {
+            $('.required').each(function () {
+                var fieldValue = $(this).val();
+                if (!fieldValue) {
+                    $(this).next('.error-message').text('Please fill out this field.');
+                } else {
+                    $(this).next('.error-message').text('');
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '.signup-btn', function (event) {
+        event.preventDefault();
+        if (validateSignUpForm()) {
+            $('#signup-form').submit();
         } else {
             $('.required').each(function () {
                 var fieldValue = $(this).val();
@@ -114,20 +151,48 @@ function addClickEvents() {
             $('#error-password').text('Enter password of length min 8');
             return false;
         }
-        console.log(window.location.origin + '/login');
  
         $.ajax({
             method: form.attr('method'),
             url: window.location.origin + '/login',
             data: formData,
             success: function (res) {
-                console.log(res);
                 $('.error-message').text('');
                 if(res.status) {
                     $('#loginModal').modal('hide');
                     $('#appointmentModal').modal('show');
                 } else {
                     $('#signup-first').text("Welcome! It looks like you're visiting us for the first time. Please sign up to create an account before logging in.");
+                    $('.signup-appear').show();
+                }
+                $('#discounts-table').DataTable().ajax.reload();
+            },
+            error: function () {
+                // swal('', 'Discount not saved.', 'error');
+            }
+        });
+    });
+
+    $("#signup-form").submit(function (event) {
+        var form = $(this);
+        event.preventDefault();
+        var formData = form.serialize();
+        var password = form.find('input[name="password"]').val();
+        if (password.length < 8) {
+            $('#error-password').text('Enter password of length min 8');
+            return false;
+        }
+ 
+        $.ajax({
+            method: 'POST',
+            url: window.location.origin + '/signup',
+            data: formData,
+            success: function (res) {
+                $('.error-message').text('');
+                if(res.status) {
+                    $('#signUpModal').modal('hide');
+                    $('#appointmentModal').modal('show');
+                } else {
                 }
                 $('#discounts-table').DataTable().ajax.reload();
             },
@@ -141,6 +206,16 @@ function addClickEvents() {
 function validateForm() {
     var isValid = true;
     $('#login-form .required').each(function () {
+        if ($(this).val() === '') {
+            isValid = false;
+        }
+    });
+    return isValid;
+}
+
+function validateSignUpForm() {
+    var isValid = true;
+    $('#signup-form .required').each(function () {
         if ($(this).val() === '') {
             isValid = false;
         }
