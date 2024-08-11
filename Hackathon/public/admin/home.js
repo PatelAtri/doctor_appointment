@@ -18,6 +18,15 @@ $(document).ready(function() {
         $(this).find('input[type="text"], input[type="password"]').val('');
         $('.error-message').text('');
     });
+
+    $(document).on('input', '.required', function() {
+        var fieldValue = $(this).val();
+        if (fieldValue) {
+            $(this).next('.error-message').text('');
+        } else {
+            $(this).next('.error-message').text('Please fill out this field.');
+        }
+    });
  
 });
 
@@ -119,34 +128,36 @@ function addClickEvents() {
 
     $(document).on('click', '.login-btn', function (event) {
         event.preventDefault();
-        if (validateForm()) {
-            $('#login-form').submit();
-        } else {
-            $('.required').each(function () {
-                var fieldValue = $(this).val();
-                if (!fieldValue) {
-                    $(this).next('.error-message').text('Please fill out this field.');
-                } else {
-                    $(this).next('.error-message').text('');
-                }
-            });
-        }
+        validateAndSubmitForm('#login-form');
+        // if (validateForm()) {
+        //     $('#login-form').submit();
+        // } else {
+        //     $('.required').each(function () {
+        //         var fieldValue = $(this).val();
+        //         if (!fieldValue) {
+        //             $(this).next('.error-message').text('Please fill out this field.');
+        //         } else {
+        //             $(this).next('.error-message').text('');
+        //         }
+        //     });
+        // }
     });
 
     $(document).on('click', '.signup-btn', function (event) {
         event.preventDefault();
-        if (validateSignUpForm()) {
-            $('#signup-form').submit();
-        } else {
-            $('.required').each(function () {
-                var fieldValue = $(this).val();
-                if (!fieldValue) {
-                    $(this).next('.error-message').text('Please fill out this field.');
-                } else {
-                    $(this).next('.error-message').text('');
-                }
-            });
-        }
+        validateAndSubmitForm('#signup-form');
+        // if (validateSignUpForm()) {
+        //     $('#signup-form').submit();
+        // } else {
+        //     $('.required').each(function () {
+        //         var fieldValue = $(this).val();
+        //         if (!fieldValue) {
+        //             $(this).next('.error-message').text('Please fill out this field.');
+        //         } else {
+        //             $(this).next('.error-message').text('');
+        //         }
+        //     });
+        // }
     });
 
     $("#login-form").submit(function (event) {
@@ -214,25 +225,25 @@ function addClickEvents() {
     });
 }
 
-function validateForm() {
-    var isValid = true;
-    $('#login-form .required').each(function () {
-        if ($(this).val() === '') {
-            isValid = false;
-        }
-    });
-    return isValid;
-}
+// function validateForm() {
+//     var isValid = true;
+//     $('#login-form .required').each(function () {
+//         if ($(this).val() === '') {
+//             isValid = false;
+//         }
+//     });
+//     return isValid;
+// }
 
-function validateSignUpForm() {
-    var isValid = true;
-    $('#signup-form .required').each(function () {
-        if ($(this).val() === '') {
-            isValid = false;
-        }
-    });
-    return isValid;
-}
+// function validateSignUpForm() {
+//     var isValid = true;
+//     $('#signup-form .required').each(function () {
+//         if ($(this).val() === '') {
+//             isValid = false;
+//         }
+//     });
+//     return isValid;
+// }
 
 function bookAppointmentModalFunction (hospitalId) {
     console.log(hospitalId);
@@ -260,6 +271,20 @@ function bookAppointmentModalFunction (hospitalId) {
             // swal('', 'Discount not saved.', 'error');
         }
     });
+}
+
+function validateAndSubmitForm(formSelector) {
+    var isValid = true;
+    $(formSelector + ' .required').each(function () {
+        if ($(this).val() === '') {
+            isValid = false;
+            $(this).next('.error-message').text('Please fill out this field.');
+        }
+    });
+
+    if (isValid) {
+        $(formSelector).submit();
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
