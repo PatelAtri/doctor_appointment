@@ -52,12 +52,13 @@ class HomeController extends Controller
         }
     }
 
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $email = $request->input('email');
         $password = $request->input('password');
-        $user = loginUser::where('email',$email)->first();
+        $user = loginUser::where('email', $email)->first();
         if ($user) {
-            if(Hash::check($password, $user->password)) {
+            if (Hash::check($password, $user->password)) {
                 return [
                     "status" => true,
                 ];
@@ -73,7 +74,8 @@ class HomeController extends Controller
         }
     }
 
-    public function signup (Request $request) {
+    public function signup(Request $request)
+    {
         try {
             $user = new loginUser();
             $user->name = $request->input('name');
@@ -87,7 +89,7 @@ class HomeController extends Controller
                 "message" => "Signup successfully done."
             ];
         } catch (\Exception $e) {
-            \Log::info('signup error',[$e->getMessage()]);
+            \Log::info('signup error', [$e->getMessage()]);
             return [
                 "status" => false,
                 "message" => $e->getMessage()
@@ -95,8 +97,14 @@ class HomeController extends Controller
         }
     }
 
-    public function doctorData (Request $request) {
-        \Log::info('hospital Id',[$request->hospitalId]);
-        //healthcare_details table mathi search krje and response get krje ajax ma
+    public function doctorData(Request $request)
+    {
+        // \Log::info('hospital Id', [$request->hospitalId]);
+        $healthcare_details = healthcare_details::where('id', $request->hospitalId)->first();
+        return [
+            "status" => true,
+            "data" => $healthcare_details
+        ];
+        // return view('home', compact('healthcare_details'));
     }
 }

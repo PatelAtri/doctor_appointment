@@ -245,6 +245,14 @@ function bookAppointmentModalFunction (hospitalId) {
         success: function (res) {
             console.log(res);
             if(res.status) {
+            var p = $('#appointmentModal').find('#appointment-form');
+            p.find('#id').text(res.data.id);
+            p.find('#doctor_name').text(res.data.doctor_name);
+            p.find('#hospital_name').text(res.data.hospital_name);
+            p.find('#disease_name').text(res.data.disease_name);
+            p.find('#address').text(res.data.address);
+            p.find('#doctor_contact_no').text(res.data.doctor_contact_no);
+            p.find('#hospital_contact_no').text(res.data.hospital_contact_no);
             } else {
             }
         },
@@ -253,3 +261,43 @@ function bookAppointmentModalFunction (hospitalId) {
         }
     });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const appointmentDate = document.getElementById('appointment_date');
+    const appointmentTime = document.getElementById('appointment_time');
+
+    // Disable past dates
+    const today = new Date().toISOString().split('T')[0];
+    appointmentDate.setAttribute('min', today);
+
+    // Generate time options with half-hour intervals
+    function generateTimeOptions() {
+        appointmentTime.innerHTML = '';
+
+        const startTime = new Date();
+        startTime.setHours(0, 0, 0, 0);
+        const endTime = new Date();
+        endTime.setHours(23, 30, 0, 0);
+
+        const selectedDate = new Date(appointmentDate.value);
+        const now = new Date();
+
+        if (selectedDate.toDateString() === now.toDateString()) {
+            startTime.setHours(now.getHours());
+            startTime.setMinutes(now.getMinutes() < 30 ? 30 : 0);
+            if (now.getMinutes() >= 30) startTime.setHours(now.getHours() + 1);
+        }
+
+        while (startTime <= endTime) {
+            const option = document.createElement('option');
+            option.value = startTime.toTimeString().substring(0, 5);
+            option.textContent = startTime.toTimeString().substring(0, 5);
+            appointmentTime.appendChild(option);
+
+            startTime.setMinutes(startTime.getMinutes() + 30);
+        }
+    }
+    appointmentDate.addEventListener('change', generateTimeOptions);
+
+    generateTimeOptions();
+});
