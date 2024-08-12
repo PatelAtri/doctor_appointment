@@ -14,9 +14,6 @@ use App\Http\Controllers\HomeController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/search', [HomeController::class, 'search'])->name('search');
@@ -26,3 +23,5 @@ Route::post('/login', [HomeController::class, 'login'])->name('login');
 Route::post('/signup', [HomeController::class, 'signup'])->name('signup');
 
 Route::get('/doctor-data', [HomeController::class, 'doctorData'])->name('doctor-data');
+
+Route::post('/book-appointment', [HomeController::class, 'bookAppointment'])->name('book-appointment');

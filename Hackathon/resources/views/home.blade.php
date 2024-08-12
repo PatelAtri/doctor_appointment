@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
     <style>
         body {
@@ -105,6 +107,10 @@
             font-weight: bold;
             color: #333;
         }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 
@@ -140,7 +146,7 @@
                             <div class="col-md-3">
                                 <div class="input-group mb-2">
                                     <input type="text" class="form-control" name="query"
-                                        placeholder="Search: hospital, doctor, or disease" aria-label="Search">
+                                        placeholder="Search with name of : hospital, doctor, or disease" aria-label="Search">
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -339,8 +345,10 @@
                 </div>
                 <div class="modal-body">
                     <form id="appointment-form">
-                        {{-- <p id="id"></p> --}}
+                        
                         <div class="info-card">
+                            <p class="hidden"><span id="hospital_id"></span></p>
+                            <p class="hidden"><span id="user_id"></span></p>
                             <p><span>Doctor's Name:</span> <span id="doctor_name"></span></p>
                             <p><span>Hospital Name:</span> <span id="hospital_name"></span></p>
                             <p><span>Disease:</span> <span id="disease_name"></span></p>
@@ -353,6 +361,7 @@
 
                         <label for="appointment_date">Select Appointment Date:</label>
                         <input type="date" id="appointment_date" name="appointment_date" required>
+                        <span class="error-message" id="error-appointment_date"></span>
 
                         <label for="appointment_time">Select Appointment Time:</label>
                         <select id="appointment_time" name="appointment_time" required>
@@ -361,8 +370,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <p id="signup-first"></p>
-                    <button type="button" class="btn btn-md btn-primary book-btn">Save Appointment</button>
+                    <button type="button" class="btn btn-md btn-primary book-appointment-btn">Save Appointment</button>
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div>

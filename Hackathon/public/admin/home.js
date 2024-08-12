@@ -27,7 +27,7 @@ $(document).ready(function() {
             $(this).next('.error-message').text('Please fill out this field.');
         }
     });
- 
+
 });
 
 function addClickEvents() {
@@ -112,7 +112,6 @@ function addClickEvents() {
 
     $(document).on('click', '.appointment', function() {
         var hospitalId = $(this).data('hospital-id');
-        console.log(hospitalId);
         $('#loginModal').modal('show');
         $('#loginModal').find('.login-btn').data('hospital-id', hospitalId);
         $('#loginModal').find('.signup-appear').data('hospital-id', hospitalId);    
@@ -120,7 +119,6 @@ function addClickEvents() {
 
     $(document).on('click', '.signup-appear', function() {
         var hospitalId = $(this).data('hospital-id');
-        console.log(hospitalId);
         $('#loginModal').modal('hide');
         $('#signUpModal').modal('show');
         $('#signUpModal').find('.signup-btn').data('hospital-id', hospitalId);
@@ -129,35 +127,11 @@ function addClickEvents() {
     $(document).on('click', '.login-btn', function (event) {
         event.preventDefault();
         validateAndSubmitForm('#login-form');
-        // if (validateForm()) {
-        //     $('#login-form').submit();
-        // } else {
-        //     $('.required').each(function () {
-        //         var fieldValue = $(this).val();
-        //         if (!fieldValue) {
-        //             $(this).next('.error-message').text('Please fill out this field.');
-        //         } else {
-        //             $(this).next('.error-message').text('');
-        //         }
-        //     });
-        // }
     });
 
     $(document).on('click', '.signup-btn', function (event) {
         event.preventDefault();
         validateAndSubmitForm('#signup-form');
-        // if (validateSignUpForm()) {
-        //     $('#signup-form').submit();
-        // } else {
-        //     $('.required').each(function () {
-        //         var fieldValue = $(this).val();
-        //         if (!fieldValue) {
-        //             $(this).next('.error-message').text('Please fill out this field.');
-        //         } else {
-        //             $(this).next('.error-message').text('');
-        //         }
-        //     });
-        // }
     });
 
     $("#login-form").submit(function (event) {
@@ -169,7 +143,6 @@ function addClickEvents() {
             $('#error-password').text('Enter password of length min 8');
             return false;
         }
-
          var hospitalId = $('#loginModal').find('.login-btn').data('hospital-id');
         $.ajax({
             method: form.attr('method'),
@@ -179,7 +152,8 @@ function addClickEvents() {
                 $('.error-message').text('');
                 if(res.status) {
                     $('#loginModal').modal('hide');
-                    bookAppointmentModalFunction(hospitalId);
+                    var userId = res.userId;
+                    bookAppointmentModalFunction(hospitalId, userId);
                     $('#appointmentModal').modal('show');
                 } else {
                     $('#signup-first').text("Welcome! It looks like you're visiting us for the first time. Please sign up to create an account before logging in.");
@@ -223,30 +197,65 @@ function addClickEvents() {
             }
         });
     });
+
+    $(document).on('click', '.book-appointment-btn', function (event) {
+        var form = $('#appointment-form');
+        var userId = form.find('#user_id').text();
+        var hospitalId = form.find('#hospital_id').text();
+
+        var data = {};
+        data.userId = userId;
+        data.hospitalId = hospitalId;
+        data._token = form.find('input[name="_token"]').val();
+        data.formData = form.serialize();
+        Swal.fire({
+            title: 'Info',
+            text: 'Wait until you get message',
+            icon: 'info',
+            timer: 2000,
+            showConfirmButton: false
+        });
+
+        $.ajax({
+            method: 'POST',
+            url: window.location.origin + '/book-appointment',
+            data: data,
+            success: function (res) {
+                $('.error-message').text('');
+                if (res.status) {
+                    $('#appointmentModal').modal('hide');
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Appointment booked successfully!',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to book the appointment.',
+                        icon: 'error',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                }
+                $('#discounts-table').DataTable().ajax.reload();
+            },
+            error: function () {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred while booking the appointment.',
+                    icon: 'error',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }
+        });
+    });
 }
 
-// function validateForm() {
-//     var isValid = true;
-//     $('#login-form .required').each(function () {
-//         if ($(this).val() === '') {
-//             isValid = false;
-//         }
-//     });
-//     return isValid;
-// }
-
-// function validateSignUpForm() {
-//     var isValid = true;
-//     $('#signup-form .required').each(function () {
-//         if ($(this).val() === '') {
-//             isValid = false;
-//         }
-//     });
-//     return isValid;
-// }
-
-function bookAppointmentModalFunction (hospitalId) {
-    console.log(hospitalId);
+function bookAppointmentModalFunction (hospitalId, userId) {
     var data = {};
     data.hospitalId = hospitalId;
     $.ajax({
@@ -254,10 +263,10 @@ function bookAppointmentModalFunction (hospitalId) {
         url: window.location.origin + '/doctor-data',
         data: data,
         success: function (res) {
-            console.log(res);
             if(res.status) {
             var p = $('#appointmentModal').find('#appointment-form');
-            p.find('#id').text(res.data.id);
+            p.find('#user_id').text(userId);
+            p.find('#hospital_id').text(res.data.id);
             p.find('#doctor_name').text(res.data.doctor_name);
             p.find('#hospital_name').text(res.data.hospital_name);
             p.find('#disease_name').text(res.data.disease_name);
