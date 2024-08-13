@@ -137,32 +137,32 @@
         <p>Data searched by you will be displayed here</p>
         <i class="fas fa-refresh fa-spin fa-2x"></i>
     </div>
-    <!-- <div class="card"> -->
+
     <section id="list">
-        <div class="container">
-            <h2>Data that you have searched</h2>
-            <div id="datatable-container">
-                <table id="hospital-datatable" class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Doctor Name</th>
-                            <th>Hospital Name</th>
-                            <th>Disease Name</th>
-                            <th>Address</th>
-                            <th>Status</th>
-                            <th>Doctor contact no</th>
-                            <th>Hospital contact no</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="hospital-datatable-body">
-                    </tbody>
-                </table>
-            </div>
+    <div class="container py-4">
+        <h2 class="mb-4">Data that you have searched</h2>
+        <div id="datatable-container" class="table-responsive">
+            <table id="hospital-datatable" class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Id</th>
+                        <th>Doctor Name</th>
+                        <th>Hospital Name</th>
+                        <th>Disease Name</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                        <th>Doctor Contact No</th>
+                        <th>Hospital Contact No</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="hospital-datatable-body">
+                </tbody>
+            </table>
         </div>
-    </section>
-    <!-- </div> -->
+    </div>
+</section>
+<!-- </div> -->
 
     <div style="margin-top: 15px">
         <div style="margin-left: 37%">ONLINE APPOINTMENT SCHEDULING PLATFORM</div>

@@ -1,0 +1,55 @@
+body {
+    position: relative;
+}
+
+#contact {
+    margin-top: 100px;
+}
+
+#list {
+    display: none;
+}
+
+.card {
+    background-color: white;
+    margin: 10px;
+    padding: 2px;
+}
+
+.navbar {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    margin: 0 10px;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.nav-link:hover {
+    color: #fff !important;
+    background-color: #3F7496;
+    border-radius: 5px;
+}
+
+.nav-link.active {
+    color: #3F7496;
+    color: white;
+    font-weight: bold;
+}
+
+.error-message {
+    color: red;
+}
+
+#spinner {
+    display: none;
+    text-align: center;
+    margin: 20px;
+}
